@@ -24,6 +24,13 @@ function reflejarColorInput() {
     inputRgb.value = inputRgb.value.replace(')', '');
 }
 
+document.getElementById('baseColorHex').addEventListener('input', function (e) {
+    var value = e.target.value;
+    // Permitir solo caracteres hexadecimales y el símbolo #
+    if (!/^#[0-9A-Fa-f]*$/.test(value)) {
+        e.target.value = value.slice(0, -1); // Eliminar el último carácter no válido
+    }
+});
 // falta terminar
 function reflejarHexAPaleta() {
     const inputHex = document.getElementById('baseColorHex');
@@ -33,7 +40,6 @@ function reflejarHexAPaleta() {
         try {
             colorPicker.color.hexString = inputHexValue;
         } catch (error) {
-            console.error("Error: Invalid hex string", error);
             // Revertir al último color válido
             inputHexValue = colorPicker.color.hexString;
         }

@@ -10,9 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/dist/css/home.css">
-    <script src="function.js"></script>
 </head>
 <body>
     @yield('content')
+    <script src="function.js"></script>
 </body>
 </html>
