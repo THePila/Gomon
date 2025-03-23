@@ -4,7 +4,7 @@ $(window).on('load', function () {
 });
 
 
-$(document).on('input', '#baseColorHex', actualizarColorDesdeHex);
+$(document).on('input', '#baseColorHex', reflejarHexAPaleta);
 $(document).on('change', '#selectColor', desplegarCursores);
 // $(document).on('mouseover', '.color-box', desplegarCursores);
 
@@ -24,33 +24,40 @@ function reflejarColorInput() {
     inputRgb.value = inputRgb.value.replace(')', '');
 }
 
-//falta terminar
-function actualizarColorDesdeHex() {
-    const inputHex = document.getElementById('baseColorHex').value;
+// falta terminar
+function reflejarHexAPaleta() {
+    const inputHex = document.getElementById('baseColorHex');
+    const inputHexValue = inputHex.value;
 
-    colorPicker.color.hexString = inputHex;
+    if (inputHexValue.length == 7) {
+        try {
+            colorPicker.color.hexString = inputHexValue;
+        } catch (error) {
+            console.error("Error: Invalid hex string", error);
+            // Revertir al último color válido
+            inputHexValue = colorPicker.color.hexString;
+        }
+    }
 }
 
 function actualizarColorComplementario() {
-    // const color1 = colorPicker.colors[0];
-    // // console.log(color1);
-    // const complementarioHue = (color1.hue + 180) % 360; // Calcula el tono complementario
-    // const complementario = new iro.Color({ h: complementarioHue, s: color1.saturation, v: color1.value });
-    // colorPicker.colors[1].set(complementario); // Aplica el color complementario al segundo cursor
+    const color1 = colorPicker.colors[0];
+    // console.log(color1);
+    const complementarioHue = (color1.hue + 180) % 360; // Calcula el tono complementario
+    const complementario = new iro.Color({ h: complementarioHue, s: color1.saturation, v: color1.value });
+    colorPicker.colors[1].set(complementario); // Aplica el color complementario al segundo cursor
 }
 
 function actualizarColorMonocromatico() {
 
-
-    // Lógica para actualizar colores monocromáticos
 }
 
-function actualizarColorAnalogico() {
-    const color1 = colorPicker.colors[0];
-    const color2 = colorPicker.colors[1];
+// function actualizarColorAnalogico() {
+//     const color1 = colorPicker.colors[0];
+//     const color2 = colorPicker.colors[1];
 
-    const colorAnalogico = new iro.Color({ h: color1.hue + 30, s: color1.saturation, v: color1.value });
-}
+//     const colorAnalogico = new iro.Color({ h: color1.hue + 30, s: color1.saturation, v: color1.value });
+// }
 
 
 

@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-6">
                     <p class="form-label">Color Base en Hex</p>
-                    <input type="text" class="form-control" id="baseColorHex" name="baseColorHex">
+                    <input type="text" class="form-control" id="baseColorHex" name="baseColorHex" maxlength="7">
                     <p class="form-label">Color Base en RGB</p>
                     <input type="text" class="form-control" id="baseColorRGB" name="baseColorRGB" readonly>
                     <div class="mt-5">
