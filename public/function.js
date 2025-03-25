@@ -46,12 +46,18 @@ function reflejarHexAPaleta() {
     }
 }
 
-function actualizarColorComplementario() {
-    const color1 = colorPicker.colors[0];
-    // console.log(color1);
-    const complementarioHue = (color1.hue + 180) % 360; // Calcula el tono complementario
-    const complementario = new iro.Color({ h: complementarioHue, s: color1.saturation, v: color1.value });
-    colorPicker.colors[1].set(complementario); // Aplica el color complementario al segundo cursor
+function actualizarColorComplementario(interactuarConPrimero) {
+    if (interactuarConPrimero) {
+        const color1 = colorPicker.colors[0];
+        const complementarioHue = (color1.hue + 180) % 360; // Calcula el tono complementario
+        const complementario = new iro.Color({ h: complementarioHue, s: color1.saturation, v: color1.value });
+        colorPicker.colors[1].set(complementario); // Aplica el color complementario al segundo cursor
+    } else {
+        const color2 = colorPicker.colors[1];
+        const complementarioHue = (color2.hue + 180) % 360; // Calcula el tono complementario
+        const complementario = new iro.Color({ h: complementarioHue, s: color2.saturation, v: color2.value });
+        colorPicker.colors[0].set(complementario); // Aplica el color complementario al primer cursor
+    }
 }
 
 function actualizarColorMonocromatico() {
@@ -80,7 +86,8 @@ function desplegarCursores() {
         });
     } else if (colorSelect.value === "complementario") {
         colorPicker.on('color:change', function (color) {
-            actualizarColorComplementario();
+            const interactuarConPrimero = color.index === 0;
+            actualizarColorComplementario(interactuarConPrimero);
         });
     }
 }
