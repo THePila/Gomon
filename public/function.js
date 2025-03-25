@@ -22,6 +22,7 @@ function reflejarColorInput() {
     inputRgb.value = colorPicker.color.rgbString;
     inputRgb.value = inputRgb.value.replace('rgb(', '');
     inputRgb.value = inputRgb.value.replace(')', '');
+    console.log("hola");
 }
 
 document.getElementById('baseColorHex').addEventListener('input', function (e) {
@@ -31,7 +32,6 @@ document.getElementById('baseColorHex').addEventListener('input', function (e) {
         e.target.value = value.slice(0, -1); // Eliminar el último carácter no válido
     }
 });
-// falta terminar
 function reflejarHexAPaleta() {
     const inputHex = document.getElementById('baseColorHex');
     const inputHexValue = inputHex.value;
@@ -44,6 +44,8 @@ function reflejarHexAPaleta() {
             inputHexValue = colorPicker.color.hexString;
         }
     }
+    // si no llamo aca a la funcion el segundo color de la paleta no se refleja correctamente
+    convertirHSVAHex();
 }
 
 function actualizarColorComplementario(interactuarConPrimero) {
@@ -61,7 +63,10 @@ function actualizarColorComplementario(interactuarConPrimero) {
 }
 
 function actualizarColorMonocromatico() {
-
+    const color1 = colorPicker.colors[0];
+    const color2 = colorPicker.colors[1];
+    const colorMonocromatico = new iro.Color({ h: color1.hue, s: color1.saturation, v: color1.value });
+    colorPicker.colors[1].set(colorMonocromatico);
 }
 
 // function actualizarColorAnalogico() {
@@ -97,21 +102,35 @@ function convertirHSVAHex() {
     var color2 = colorPicker.colors[1];
     color1 = color1.hexString;
     color2 = color2.hexString;
-    console.log(color1);
-    console.log(color2);
+    console.log("color 1" + color1);
+    console.log("color 2" + color2);
     generarPaleta(color1, color2);
 }
 
+
 function generarPaleta(color1, color2) {
     $('#divPaleta').empty();
-    const colorBox1 = `
+    const selectColor = document.getElementById('selectColor');
+    if (selectColor == "complementario") {
+        const colorBox1 = `
     <div class="col color-box" style="background-color:${color1}">
         <button type="button" class="btn" style="backgroud-color:${color1}"><span>${color1}</span></button>
     </div>`;
-    const colorBox2 = `
+        const colorBox2 = `
     <div class="col color-box" style="background-color:${color2}">
         <button type="button" class="btn" style="backgroud-color:${color2}"><span>${color2}</span></button>
     </div>`;
+    }
+    else if (selectColor == "monocromatico") {
+        const colorBox1 = `
+    <div class="col color-box" style="background-color:${color1}">
+        <button type="button" class="btn" style="backgroud-color:${color1}"><span>${color1}</span></button>
+    </div>`;
+        const colorBox2 = `
+    <div class="col color-box" style="background-color:${color2}">
+        <button type="button" class="btn" style="backgroud-color:${color2}"><span>${color2}</span></button>
+    </div>`;
+    }
     $('#divPaleta').append(colorBox1, colorBox2);
 }
 
