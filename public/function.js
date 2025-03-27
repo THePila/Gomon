@@ -6,7 +6,7 @@ $(window).on('load', function () {
 
 $(document).on('input', '#baseColorHex', reflejarHexAPaleta);
 $(document).on('change', '#selectColor', desplegarCursores);
-$(document).on('click', '#selectColor', generarPaleta);
+$(document).on('change', '#selectColor', generarPaleta);
 // $(document).on('mouseover', '.color-box', desplegarCursores);
 
 var colorPicker = new iro.ColorPicker("#pickerColor", {
@@ -23,7 +23,7 @@ function reflejarColorInput() {
     inputRgb.value = colorPicker.color.rgbString;
     inputRgb.value = inputRgb.value.replace('rgb(', '');
     inputRgb.value = inputRgb.value.replace(')', '');
-    console.log("hola");
+    // console.log("hola");
 }
 
 document.getElementById('baseColorHex').addEventListener('input', function (e) {
@@ -33,6 +33,7 @@ document.getElementById('baseColorHex').addEventListener('input', function (e) {
         e.target.value = value.slice(0, -1); // Eliminar el último carácter no válido
     }
 });
+
 function reflejarHexAPaleta() {
     const inputHex = document.getElementById('baseColorHex');
     const inputHexValue = inputHex.value;
@@ -86,100 +87,113 @@ function actualizarColorComplementario(interactuarConPrimero) {
 
 function actualizarColorAnalogico() {
     const color1 = colorPicker.colors[0];
-    const color2 = colorPicker.colors[1];
-    const color3 = colorPicker.colors[2];
 
-    const color1Hue = color1.hue;
-    const color2Hue = color2.hue;
-    const color3Hue = color3.hue;
-    
-    console.log(color3Hue);
+    const analogoHue1 = (color1.hue + 30) % 360; // Calcula el tono analógico 1
+    const analogoHue2 = (color1.hue - 30) % 360; // Calcula el tono analógico 2
 
-    const color1HueOffset = (color1Hue + 30) % 360;
-    const color2HueOffset = (color2Hue + 30) % 360;
-    const color3HueOffset = (color3Hue + 30) % 360;
+    const analogo1 = new iro.Color({ h: analogoHue1, s: color1.saturation, v: color1.value });
+    const analogo2 = new iro.Color({ h: analogoHue2, s: color1.saturation, v: color1.value });
 
-    // colorPicker.colors[0].set(color1HueOffset);
-    // colorPicker.colors[1].set(color2HueOffset);
-    // colorPicker.colors[2].set(color3HueOffset);
+    colorPicker.colors[1].set(analogo1); // Aplica el color analógico 1 al segundo cursor
+    colorPicker.colors[2].set(analogo2); // Aplica el color analógico 2 al tercer cursor
 }
 
 
 
-function desplegarCursores() {
-    const colorSelect = document.getElementById('selectColor');
+let valorSelect
 
-    if (colorSelect.value === "monocromatico") {
-        colorPicker.on('color:change', function (color) {
-            actualizarColorMonocromatico();
-        });
-    } else if (colorSelect.value === "analogico") {
-        colorPicker.on('color:change', function (color) {
-            actualizarColorAnalogico();
-        });
-        colorPicker.addColor("#f00");
-    } else if (colorSelect.value === "complementario") {
-        colorPicker.on('color:change', function (color) {
-            const interactuarConPrimero = color.index === 0;
-            actualizarColorComplementario(interactuarConPrimero);
-        });
-        if (colorPicker.colors.length > 2) {
-            colorPicker.removeColor(2);
+function desplegarCursores() {
+    const colorSelect = document.getElementById('selectColor').value;
+    valorSelect = colorSelect;
+    ajustarCursores(colorSelect);
+}
+
+colorPicker.on('color:change', function (color) {
+    // Siempre reflejar los cambios en los inputs y la paleta
+    convertirHSVAHex();
+    reflejarColorInput();
+    // Ejecutar la lógica específica según el modo activo
+    if (valorSelect === "monocromatico") {
+        actualizarColorMonocromatico();
+    } else if (valorSelect === "analogico") {
+        actualizarColorAnalogico();
+    } else if (valorSelect === "complementario") {
+        const interactuarConPrimero = color.index === 0;
+        actualizarColorComplementario(interactuarConPrimero);
+    }
+});
+
+function ajustarCursores(colorSelect) {
+    if (colorSelect === "analogico") {
+        // Asegurarse de que haya tres colores para el modo análogo
+        if (colorPicker.colors.length < 3) {
+            colorPicker.addColor("#f00");
+        }
+    } else {
+        // Limitar a dos colores para otros modos
+        while (colorPicker.colors.length > 2) {
+            colorPicker.removeColor(colorPicker.colors.length - 1);
         }
     }
 }
 
+
 function convertirHSVAHex() {
-    var color1 = colorPicker.colors[0];
-    var color2 = colorPicker.colors[1];
-    color1 = color1.hexString;
-    color2 = color2.hexString;
-    console.log("color 1" + color1);
-    console.log("color 2" + color2);
+    console.log(valorSelect);
+
+    // Lógica específica para cada modo
+    if (valorSelect === "complementario") {
+        manejarModoComplementario();
+    } else if (valorSelect === "analogico") {
+        manejarModoAnalogico();
+    }
+}
+
+function manejarModoComplementario() {
+    const color1 = colorPicker.colors[0].hexString;
+    const color2 = colorPicker.colors[1].hexString;
+
     generarPaleta(color1, color2);
 }
 
+function manejarModoAnalogico() {
+    const color1 = colorPicker.colors[0].hexString;
+    const color2 = colorPicker.colors[1].hexString;
+    const color3 = colorPicker.colors[2].hexString;
 
-function generarPaleta(color1, color2) {
+    generarPaleta(color1, color2, color3);
+}
+
+function generarPaleta(color1, color2, color3) {
     $('#divPaleta').empty();
-    const colorBox1 = `
-    <div class="col color-box" style="background-color:${color1}">
+    if (valorSelect == "complementario") {
+        const colorBox1 = `
+        <div class="col color-box" style="background-color:${color1}">
         <button type="button" class="btn" style="backgroud-color:${color1}"><span>${color1}</span></button>
-    </div>`;
-    const colorBox2 = `
-    <div class="col color-box" style="background-color:${color2}">
+        </div>`;
+        const colorBox2 = `
+        <div class="col color-box" style="background-color:${color2}">
         <button type="button" class="btn" style="backgroud-color:${color2}"><span>${color2}</span></button>
-    </div>`;
-    $('#divPaleta').append(colorBox1, colorBox2);
-    // const selectColor = document.getElementById('selectColor');
-    // if (selectColor == "complementario") {
-    //     const colorBox1 = `
-    // <div class="col color-box" style="background-color:${color1}">
-    //     <button type="button" class="btn" style="backgroud-color:${color1}"><span>${color1}</span></button>
-    // </div>`;
-    //     const colorBox2 = `
-    // <div class="col color-box" style="background-color:${color2}">
-    //     <button type="button" class="btn" style="backgroud-color:${color2}"><span>${color2}</span></button>
-    // </div>`;
-    // $('#divPaleta').append(colorBox1, colorBox2);
-    // }
-    // else if (selectColor == "monocromatico") {
-    //     const colorBox1 = `
-    // <div class="col color-box" style="background-color:${color1}">
-    //     <button type="button" class="btn" style="backgroud-color:${color1}"><span>${color1}</span></button>
-    // </div>`;
-    //     const colorBox2 = `
-    // <div class="col color-box" style="background-color:${color2}">
-    //     <button type="button" class="btn" style="backgroud-color:${color2}"><span>${color2}</span></button>
-    // </div>`;
-    // $('#divPaleta').append(colorBox1, colorBox2);
-    // }
+        </div>`;
+        $('#divPaleta').append(colorBox1, colorBox2);
+    }
+    else if (valorSelect == "analogico") {
+        const colorBox1 = `
+        <div class="col color-box" style="background-color:${color1}">
+        <button type="button" class="btn" style="backgroud-color:${color1}"><span>${color1}</span></button>
+        </div>`;
+        const colorBox2 = `
+        <div class="col color-box" style="background-color:${color2}">
+        <button type="button" class="btn" style="backgroud-color:${color2}"><span>${color2}</span></button>
+        </div>`;
+        const colorBox3 = `<div class="col color-box" style="background-color:${color3}">
+        <button type="button" class="btn" style="backgroud-color:${color3}"><span>${color3}</span></button>
+        </div>`;
+        console.log(color3);
+        $('#divPaleta').append(colorBox1, colorBox2, colorBox3);
+    }
 }
 
 
-colorPicker.on('color:change', function (color) {
-    convertirHSVAHex();
-    reflejarColorInput();
-});
 
 
