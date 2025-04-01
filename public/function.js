@@ -50,8 +50,8 @@ function reflejarHexAPaleta() {
     convertirHSVAHex();
 }
 
-function actualizarColorComplementario(interactuarConPrimero) {
-    if (interactuarConPrimero) {
+function actualizarColorComplementario(primerSelectorComple) {
+    if (primerSelectorComple) {
         const color1 = colorPicker.colors[0];
         const complementarioHue = (color1.hue + 180) % 360; // Calcula el tono complementario
         const complementario = new iro.Color({ h: complementarioHue, s: color1.saturation, v: color1.value });
@@ -85,17 +85,43 @@ function actualizarColorComplementario(interactuarConPrimero) {
 //     }
 // }
 
-function actualizarColorAnalogico() {
-    const color1 = colorPicker.colors[0];
+function actualizarColorAnalogico(primerSelectorAnalogo, SegundoSelectorAnalogo, tercerSelectorAnalogo) {
+    if (primerSelectorAnalogo) {
+        const color1 = colorPicker.colors[0];
 
-    const analogoHue1 = (color1.hue + 30) % 360; // Calcula el tono analógico 1
-    const analogoHue2 = (color1.hue - 30) % 360; // Calcula el tono analógico 2
+        const analogoHue1 = (color1.hue + 30) % 360; // Calcula el tono analógico 1
+        const analogoHue2 = (color1.hue - 30) % 360; // Calcula el tono analógico 2
 
-    const analogo1 = new iro.Color({ h: analogoHue1, s: color1.saturation, v: color1.value });
-    const analogo2 = new iro.Color({ h: analogoHue2, s: color1.saturation, v: color1.value });
+        const analogo1 = new iro.Color({ h: analogoHue1, s: color1.saturation, v: color1.value });
+        const analogo2 = new iro.Color({ h: analogoHue2, s: color1.saturation, v: color1.value });
 
-    colorPicker.colors[1].set(analogo1); // Aplica el color analógico 1 al segundo cursor
-    colorPicker.colors[2].set(analogo2); // Aplica el color analógico 2 al tercer cursor
+        colorPicker.colors[1].set(analogo1); // Aplica el color analógico 1 al segundo cursor
+        colorPicker.colors[2].set(analogo2); // Aplica el color analógico 2 al tercer cursor
+    }
+    else if (SegundoSelectorAnalogo) {
+        const color2 = colorPicker.colors[1];
+
+        const analogoHue1 = (color2.hue + 30) % 360; // Calcula el tono analógico 1
+        const analogoHue2 = (color2.hue - 30) % 360; // Calcula el tono analógico 2
+
+        const analogo1 = new iro.Color({ h: analogoHue1, s: color2.saturation, v: color2.value });
+        const analogo2 = new iro.Color({ h: analogoHue2, s: color2.saturation, v: color2.value });
+
+        colorPicker.colors[0].set(analogo1); // Aplica el color analógico 1 al primer cursor
+        colorPicker.colors[2].set(analogo2); // Aplica el color analógico 2 al tercer cursor
+    }
+    else if (tercerSelectorAnalogo) {
+        const color3 = colorPicker.colors[2];
+
+        const analogoHue1 = (color3.hue + 30) % 360; // Calcula el tono analógico 1
+        const analogoHue2 = (color3.hue - 30) % 360; // Calcula el tono analógico 2
+
+        const analogo1 = new iro.Color({ h: analogoHue1, s: color3.saturation, v: color3.value });
+        const analogo2 = new iro.Color({ h: analogoHue2, s: color3.saturation, v: color3.value });
+
+        colorPicker.colors[0].set(analogo1); // Aplica el color analógico 1 al primer cursor
+        colorPicker.colors[1].set(analogo2); // Aplica el color analógico 2 al segundo cursor
+    }
 }
 
 
@@ -116,10 +142,13 @@ colorPicker.on('color:change', function (color) {
     if (valorSelect === "monocromatico") {
         actualizarColorMonocromatico();
     } else if (valorSelect === "analogico") {
-        actualizarColorAnalogico();
+        const primerSelectorAnalogo = color.index === 0;
+        const SegundoSelectorAnalogo = color.index === 1;
+        const tercerSelectorAnalogo = color.index === 2;
+        actualizarColorAnalogico(primerSelectorAnalogo, SegundoSelectorAnalogo, tercerSelectorAnalogo);
     } else if (valorSelect === "complementario") {
-        const interactuarConPrimero = color.index === 0;
-        actualizarColorComplementario(interactuarConPrimero);
+        const primerSelectorComple = color.index === 0;
+        actualizarColorComplementario(primerSelectorComple);
     }
 });
 
