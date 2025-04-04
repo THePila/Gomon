@@ -64,26 +64,10 @@ function actualizarColorComplementario(primerSelectorComple) {
     }
 }
 
-// function actualizarColorMonocromatico() {
-//     const color1 = colorPicker.colors[0];
-//     const escalaDeGrises = [];
+function actualizarColorMonocromatico() {
+    
 
-//     // Generar una escala de grises basada en el color1
-//     for (let i = 0; i <= 10; i++) {
-//         const valorGris = i * 10; // Incrementar el valor para crear diferentes tonos de gris
-//         const colorGris = new iro.Color({ h: color1.hue, s: 0, v: valorGris });
-//         escalaDeGrises.push(colorGris);
-//     }
-
-//     // Aplicar la escala de grises al color picker
-//     for (let i = 0; i < escalaDeGrises.length; i++) {
-//         if (colorPicker.colors[i]) {
-//             colorPicker.colors[i].set(escalaDeGrises[i]);
-//         } else {
-//             colorPicker.colors.push(escalaDeGrises[i]);
-//         }
-//     }
-// }
+}
 
 function actualizarColorAnalogico(primerSelectorAnalogo, SegundoSelectorAnalogo, tercerSelectorAnalogo) {
     if (primerSelectorAnalogo) {
@@ -193,6 +177,9 @@ function manejarModoAnalogico() {
 
 function generarPaleta(color1, color2, color3) {
     $('#divPaleta').empty();
+    if (color1 == undefined || color2 == undefined && color3 == undefined) {
+        return;
+    }
     if (valorSelect == "complementario") {
         const colorBox1 = `
         <div class="col color-box" style="background-color:${color1}">
