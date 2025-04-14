@@ -3,7 +3,6 @@ $(window).on('load', function () {
     desplegarCursores();
 });
 
-
 $(document).on('input', '#baseColorHex', reflejarHexAPaleta);
 $(document).on('change', '#selectColor', desplegarCursores);
 $(document).on('change', '#selectColor', generarPaleta);
@@ -65,8 +64,33 @@ function actualizarColorComplementario(primerSelectorComple) {
 }
 
 function actualizarColorMonocromatico() {
+    const color1 = colorPicker.colors[0];
+    const hue = color1.hue;  // Mantener el mismo tono
     
-
+    // Crear variaciones monocromáticas cambiando saturación y brillo
+    // Versión 1: Color original
+    const monocromatico1 = new iro.Color({ h: hue, s: color1.saturation, v: color1.value });
+    
+    // Versión 2: Más claro (mayor brillo)
+    const monocromatico2 = new iro.Color({ h: hue, s: color1.saturation, 
+        v: Math.min(100, color1.value + 30)  // Aumenta el brillo en 30%, máximo 100
+    });
+    
+    // Versión 3: Más oscuro (menor brillo)
+    const monocromatico3 = new iro.Color({ 
+        h: hue, 
+        s: color1.saturation, 
+        v: Math.max(0, color1.value - 30)  // Disminuye el brillo en 30%, mínimo 0
+    });
+    
+    // Aplica los colores a los tres cursores
+    colorPicker.colors[0].set(monocromatico1);
+    colorPicker.colors[1].set(monocromatico2);
+    colorPicker.colors[2].set(monocromatico3);
+    
+    console.log(colorPicker.colors[0].hexString);
+    console.log(colorPicker.colors[1].hexString);
+    console.log(colorPicker.colors[2].hexString);
 }
 
 function actualizarColorAnalogico(primerSelectorAnalogo, SegundoSelectorAnalogo, tercerSelectorAnalogo) {
@@ -135,7 +159,7 @@ colorPicker.on('color:change', function (color) {
 });
 
 function ajustarCursores(colorSelect) {
-    if (colorSelect === "analogico") {
+    if (colorSelect === "analogico" || colorSelect === "monocromatico") {
         // Asegurarse de que haya tres colores para el modo análogo
         if (colorPicker.colors.length < 3) {
             colorPicker.addColor("#f00");
@@ -153,11 +177,21 @@ function convertirHSVAHex() {
     console.log(valorSelect);
 
     // Lógica específica para cada modo
+    if (valorSelect === "monocromatico") {
+        manejarModoMonocromatico();
+    }
     if (valorSelect === "complementario") {
         manejarModoComplementario();
     } else if (valorSelect === "analogico") {
         manejarModoAnalogico();
     }
+}
+
+function manejarModoMonocromatico() {
+    const color1 = colorPicker.colors[0].hexString;
+    const color2 = colorPicker.colors[1].hexString;
+    const color3 = colorPicker.colors[2].hexString;
+    generarPaleta(color1, color2, color3);
 }
 
 function manejarModoComplementario() {
@@ -180,7 +214,23 @@ function generarPaleta(color1, color2, color3) {
     if (color1 == undefined || color2 == undefined && color3 == undefined) {
         return;
     }
-    if (valorSelect == "complementario") {
+
+    if (valorSelect == "monocromatico") {
+        const colorBox1 = `
+        <div class="col color-box" style="background-color:${color1}">
+        <button type="button" class="btn" style="backgroud-color:${color1}"><span>${color1}</span></button>
+        </div>`;
+        const colorBox2 = `
+        <div class="col color-box" style="background-color:${color2}">
+        <button type="button" class="btn" style="backgroud-color:${color2}"><span>${color2}</span></button>
+        </div>`;
+        const colorBox3 = `
+        <div class="col color-box" style="background-color:${color3}">
+        <button type="button" class="btn" style="backgroud-color:${color3}"><span>${color3}</span></button>
+        </div>`;
+        $('#divPaleta').append(colorBox1, colorBox2, colorBox3);
+    }
+    else if (valorSelect == "complementario") {
         const colorBox1 = `
         <div class="col color-box" style="background-color:${color1}">
         <button type="button" class="btn" style="backgroud-color:${color1}"><span>${color1}</span></button>
