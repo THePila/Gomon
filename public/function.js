@@ -238,8 +238,14 @@ function crearColorBox(color) {
 
 function generarPaleta(color1, color2, color3) {
     $('#divPaleta').empty();
-    if (color1 == undefined || color2 == undefined && color3 == undefined) {
-        return;
+    if (valorSelect == "monocromatico" || valorSelect == "analogico") {
+        if (color1 == undefined || color2 == undefined || color3 == undefined) {
+            return;
+        }
+    } else {
+        if (color1 == undefined || color2 == undefined) {
+            return;
+        }
     }
 
     let colorBoxes = [];
