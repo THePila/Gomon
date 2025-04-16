@@ -9,8 +9,6 @@
                 <div class="col-md-6">
                     <p class="form-label ">Color Base</p>
                     <div id="pickerColor">
-                        {{-- <input type="color" class="form-control form-control-color" id="baseColor" name="baseColor"
-                            value="#ff5733"> --}}
                     </div>
                     <div class="mt-3">
                         <select class="form-select" id="selectColor">

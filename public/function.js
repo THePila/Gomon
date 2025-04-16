@@ -209,18 +209,32 @@ function manejarModoAnalogico() {
     generarPaleta(color1, color2, color3);
 }
 
-function copiarPortaPapeles(color) 
-{
+function copiarPortaPapeles(color, btnElement) 
+{   
+    const span = btnElement.querySelector('span');
+    const textoOriginal = span.textContent;
+
     navigator.clipboard.writeText(color)
         .then(() => {
-            alert(`Color ${color} copiado al portapapeles`);
+            span.textContent = "Color copiado: " ;
+            setTimeout(() => {
+                span.textContent = textoOriginal;
+            }
+            , 2000); // Cambia el texto de vuelta después de 2 segundos
         })
         .catch(err => {
             alert('Error al copiar el color: ', err);
         });
 }
 
-
+function crearColorBox(color) {
+    return `
+    <div class="col color-box" style="background-color:${color}">
+        <button type="button" onclick="copiarPortaPapeles('${color}', this)" class="btn">
+            <span>${color}</span>
+        </button>
+    </div>`;
+}
 
 function generarPaleta(color1, color2, color3) {
     $('#divPaleta').empty();
@@ -228,47 +242,17 @@ function generarPaleta(color1, color2, color3) {
         return;
     }
 
-    if (valorSelect == "monocromatico") {
-        const colorBox1 = `
-        <div class="col color-box" style="background-color:${color1}">
-        <button type="button" onclick= "copiarPortaPapeles('${color1}')" class="btn"><span>${color1}</span></button>
-        </div>`;
-        const colorBox2 = `
-        <div class="col color-box" style="background-color:${color2}">
-        <button type="button" onclick= "copiarPortaPapeles('${color2}')" class="btn"><span>${color2}</span></button>
-        </div>`;
-        const colorBox3 = `
-        <div class="col color-box" style="background-color:${color3}">
-        <button type="button" onclick= "copiarPortaPapeles('${color3}')" class="btn"><span>${color3}</span></button>
-        </div>`;
-        $('#divPaleta').append(colorBox1, colorBox2, colorBox3);
+    let colorBoxes = [];
+
+    colorBoxes.push(crearColorBox(color1));
+    colorBoxes.push(crearColorBox(color2));
+    
+    if (valorSelect == "monocromatico" || valorSelect == "analogico") {
+        colorBoxes.push(crearColorBox(color3));
     }
-    else if (valorSelect == "complementario") {
-        const colorBox1 = `
-        <div class="col color-box" style="background-color:${color1}">
-        <button type="button" onclick= "copiarPortaPapeles('${color1}')" class="btn"><span>${color1}</span></button>
-        </div>`;
-        const colorBox2 = `
-        <div class="col color-box" style="background-color:${color2}">
-        <button type="button" onclick= "copiarPortaPapeles('${color2}')" class="btn"><span>${color2}</span></button>
-        </div>`;
-        $('#divPaleta').append(colorBox1, colorBox2);
-    }
-    else if (valorSelect == "analogico") {
-        const colorBox1 = `
-        <div class="col color-box" style="background-color:${color1}">
-        <button type="button" onclick= "copiarPortaPapeles('${color1}')" class="btn"><span>${color1}</span></button>
-        </div>`;
-        const colorBox2 = `
-        <div class="col color-box" style="background-color:${color2}">
-        <button type="button" onclick= "copiarPortaPapeles('${color2}')" class="btn"><span>${color2}</span></button>
-        </div>`;
-        const colorBox3 = `<div class="col color-box" style="background-color:${color3}">
-        <button type="button" onclick= "copiarPortaPapeles('${color3}')" class="btn"><span>${color3}</span></button>
-        </div>`;
-        console.log(color3);
-        $('#divPaleta').append(colorBox1, colorBox2, colorBox3);
-    }
+    console.log (colorBoxes);
+    // Añadir todos los color boxes al div de la paleta
+    $('#divPaleta').append(colorBoxes.join(''));
 }
 
 
