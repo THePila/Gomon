@@ -13,6 +13,8 @@ var colorPicker = new iro.ColorPicker("#pickerColor", {
     colors: ["#f00", "#00f"]
 });
 
+let valorSelect
+
 function reflejarColorInput() {
 
     const inputHex = document.getElementById('baseColorHex');
@@ -131,9 +133,6 @@ function actualizarColorAnalogico(primerSelectorAnalogo, SegundoSelectorAnalogo,
 }
 
 
-
-let valorSelect
-
 function desplegarCursores() {
     const colorSelect = document.getElementById('selectColor').value;
     valorSelect = colorSelect;
@@ -229,15 +228,16 @@ function copiarPortaPapeles(color, btnElement)
 
 function crearColorBox(color) {
     return `
-    <div class="col color-box" style="background-color:${color}">
+    <div class="color-box" style="background-color:${color}">
         <button type="button" onclick="copiarPortaPapeles('${color}', this)" class="btn">
             <span>${color}</span>
         </button>
     </div>`;
 }
-
+//tengo que hacer que en vez de borrar la paleta cada vez que se cambia de select se mantenga el primer color del primer color picker y haga el modo que le corresponda
 function generarPaleta(color1, color2, color3) {
     $('#divPaleta').empty();
+
     if (valorSelect == "monocromatico" || valorSelect == "analogico") {
         if (color1 == undefined || color2 == undefined || color3 == undefined) {
             return;
@@ -261,6 +261,18 @@ function generarPaleta(color1, color2, color3) {
     $('#divPaleta').append(colorBoxes.join(''));
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Element for theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
 
+    // Theme toggle functionality
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        themeToggle.innerHTML = isDarkMode ?
+            '<i class="fas fa-sun"></i><span class="sr-only">Toggle light mode</span>' :
+            '<i class="fas fa-moon"></i><span class="sr-only">Toggle dark mode</span>';
+    });
+});
 
 

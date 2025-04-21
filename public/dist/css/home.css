@@ -1,10 +1,314 @@
+:root {
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --background: #f9fafb;
+    --card-bg: #ffffff;
+    --border: #e5e7eb;
+    --focus-ring: rgba(99, 102, 241, 0.5);
+    --radius: 0.5rem;
+    --transition: 0.2s ease;
+}
+
+.dark-mode {
+    --primary: #818cf8;
+    --primary-hover: #6366f1;
+    --text: #f9fafb;
+    --text-light: #d1d5db;
+    --background: #111827;
+    --card-bg: #1f2937;
+    --border: #374151;
+    --focus-ring: rgba(129, 140, 248, 0.5);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+header p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+}
+
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    transition: background-color var(--transition);
+}
+
+.theme-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .theme-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+select {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all var(--transition);
+}
+
+select:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+
+select {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding-right: 2.5rem;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+}
+
+.color-wheel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.color-wheel-title {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+
+.divPaleta {
+    display: flex;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+
 .color-box {
-    height: 100px;
+    height: 200px;
+    width: 100%;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.color-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.color-box:focus-within {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.color-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.instructions {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+}
+
+.instructions h2 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: var(--text);
+}
+
+.instructions p {
+    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    margin-bottom: 10px;
-    border-radius: 8px;
+    gap: 0.5rem;
+    color: var(--text);
+}
+
+.instructions i {
+    color: var(--primary);
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+/* .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: var(--card-bg);
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+} */
+
+/* .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast i {
+    color: var(--primary);
+}
+
+.live-region {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+} */
+
+@media (max-width: 768px) {
+    .divPaleta {
+        grid-template-columns: 1fr;
+    }
+
+    .color-box {
+        height: 150px;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    button,
+    select {
+        width: 100%;
+    }
+
+    #color-wheel {
+        width: 250px !important;
+        height: 250px !important;
+    }
+}
+
+input {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: all var(--transition);
+    background-color: var(--card-bg);
+    color: var(--text);
+}
+
+/* Focus styles for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
 }
