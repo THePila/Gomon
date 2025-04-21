@@ -63,11 +63,17 @@
         <p>Racing yo te amo</p>
     </footer>
 
-    <div class="toast" id="toast" role="alert" aria-live="polite">
-        <i class="fas fa-check-circle"></i>
-        <span id="toast-message">Copied to clipboard!</span>
+    <div class="toast-container position-fixed top-0 bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast"  role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <div id="toastIcon" class="rounded me-2" style="width: 20px; height: 20px;"></div>
+                <strong class="me-auto"></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+            </div>
+        </div>
     </div>
 
     <div id="live-region" class="live-region" aria-live="polite"></div>
-
 @endsection

@@ -208,21 +208,33 @@ function manejarModoAnalogico() {
     generarPaleta(color1, color2, color3);
 }
 
-function copiarPortaPapeles(color, btnElement) 
-{   
-    const span = btnElement.querySelector('span');
-    const textoOriginal = span.textContent;
+function copiarPortaPapeles(color, btnElement) {
+    const toastEl = document.getElementById('liveToast');
+    
+    // Opcional: actualizar el mensaje del toast con el color copiado
+    const toastBody = toastEl.querySelector('.toast-body');
+    toastBody.textContent = `Color copiado: ${color}`;
+    
+    // Opcional: actualizar la cabecera del toast
+    const toastHeader = toastEl.querySelector('.me-auto');
+    toastHeader.textContent = 'Copiado al portapapeles';
 
+    const toastIcon = toastEl.querySelector('#toastIcon');
+    toastIcon.style.backgroundColor = `${color}`;
+    
+    
+    // Crear una instancia de toast de Bootstrap
+    const toast = new bootstrap.Toast(toastEl);
+    
     navigator.clipboard.writeText(color)
         .then(() => {
-            span.textContent = "Color copiado: " ;
-            setTimeout(() => {
-                span.textContent = textoOriginal;
-            }
-            , 2000); // Cambia el texto de vuelta después de 2 segundos
+            // Mostrar el toast
+            toast.show();
         })
         .catch(err => {
-            alert('Error al copiar el color: ', err);
+            // En caso de error, cambiar el mensaje y mostrar el toast
+            toastBody.textContent = `Error al copiar: ${err}`;
+            toast.show();
         });
 }
 

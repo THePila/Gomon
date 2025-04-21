@@ -70,6 +70,12 @@ header p {
     color: var(--text-light);
 }
 
+.toast {
+    background-color: var(--card-bg);
+    color: var(--text);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
 .top-controls {
     display: flex;
     justify-content: space-between;
